@@ -12,3 +12,8 @@ zimme:iron-router-active
 natestrauser:connection-banner
 fezvrasta:bootstrap-material-design
 fortawesome:fontawesome
+sanjo:jasmine
+velocity:html-reporter
+aldeed:autoform
+aldeed:collection2
+velocity:console-reporter
