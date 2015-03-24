@@ -2,39 +2,83 @@
 
     describe 'Create Prompt', ->
 
+      beforeEach (done) ->
+
+Log in if logged out
+
+        if not Meteor.userId()?
+          console.log 'logging in as testuser'
+          Meteor.loginWithPassword 'testuser','password', (error) ->
+            expect(error).toBeUndefined()
+            expect(Meteor.user()).not.toBeUndefined()
+            done()
+
 ## Successfully create prompt
 
       it 'should create a prompt and attach it to a game if logged in', (done) ->
 
 ### Setup
 
-        Meteor.loginWithPassword 'testuser','password', (error) ->
-          expect(error).toBeUndefined()
-          expect(Meteor.user()).not.toBeUndefined()
-
 Create a new game to attach the prompt to
 
-          gameId = Meteor.call 'createGame'
+        Meteor.call 'createGame', (error, gameId) ->
           expect(gameId).not.toBeNull()
 
-          prompt = 'some prompt'
+          phrase = 'some prompt'
 
 ### Execute
 
-          Meteor.call 'insertPromptForGame', gameId, prompt (error, result) ->
+          console.log "gameId #{gameId}"
+
+          Meteor.call 'insertPromptForGame', gameId, phrase, (error, result) ->
 
 ### Verify
 
             expect(error).toBeUndefined()
 
             Meteor.subscribe 'singleGame', gameId, ->
-              actualGame = Games.findOne()
-              actualPrompt = Prompts.findOne()
+              actualGame = Games.findOne(gameId)
+              console.log actualGame
 
 The promptId for the game should match the prompt._id
 
-              expect(actualGame.promptId).toEqual actualPrompt._id
-              expect(actualGame.story).toEqual actualPrompt.prompt
+              expect(actualGame.promptId).not.toBeUndefined()
+              expect(actualGame.story).toEqual phrase
+              done()
+
+## Fail on bad arguments
+
+      it 'should throw an error if given bad arguments', (done) ->
+
+### Setup
+
+### Execute
+
+        badArg = stupid: 'object', thisDefinitely: 'is not an id of a game'
+        gameId = 'fakeGameId'
+        Meteor.call 'insertPromptForGame', gameId, badArg, (error, result) ->
+
+### Verify
+
+          expect(error.error).toEqual 'bad-args'
+          done()
+
+## Fail on missing game
+
+      it 'should thrown an error if gameId can\'t be found', (done) ->
+
+### Setup
+
+### Execute
+
+        goodArg = 'This is a legit writing prompt extraordinaire...'
+        badGameId = 'fakeGameId'
+        Meteor.call 'insertPromptForGame', badGameId, goodArg, (error, result) ->
+
+### Verify
+
+          expect(error.error).toEqual 'game-not-found'
+          done()
 
 ## Fail when not logged in
 
@@ -52,45 +96,3 @@ The promptId for the game should match the prompt._id
 
           expect(error.error).toEqual 'access-denied'
           done()
-
-## Fail on bad arguments
-
-      it 'should throw an error if given bad arguments', (done) ->
-
-### Setup
-
-        Meteor.loginWithPassword 'testuser','password', (error) ->
-          expect(error).toBeUndefined()
-          expect(Meteor.user()).not.toBeUndefined()
-
-### Execute
-
-          badArg = stupid: 'object', thisDefinitely: 'is not an id of a game'
-          gameId = 'fakeGameId'
-          Meteor.call 'insertPromptForGame', gameId, badArg, (error, result) ->
-
-### Verify
-
-            expect(error.error).toEqual 'bad-args'
-            done()
-
-## Fail on missing game
-
-      it 'should thrown an error if gameId can\'t be found', (done) ->
-
-### Setup
-
-        Meteor.loginWithPassword 'testuser','password', (error) ->
-          expect(error).toBeUndefined()
-          expect(Meteor.user()).not.toBeUndefined()
-
-### Execute
-
-          goodArg = 'This is a legit writing prompt extraordinaire...'
-          badGameId = 'fakeGameId'
-          Meteor.call 'insertPromptForGame', badGameId, goodArg, (error, result) ->
-
-### Verify
-
-            expect(error.error).toEqual 'game-not-found'
-            done()
