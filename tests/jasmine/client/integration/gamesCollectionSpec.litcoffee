@@ -1,17 +1,19 @@
-Client Integration Tests for Games collection
+# Client Integration Tests for Games collection
 
     describe 'Create Game', ->
 
+## Success test
+
       it 'should create a new game if logged in', (done) ->
 
-## Setup
+### Setup
 
         Meteor.loginWithPassword 'testuser','password', (error) ->
 
           expect(error).toBeUndefined()
           expect(Meteor.user()).not.toBeUndefined()
 
-## Execute
+### Execute
 
           Meteor.call 'createGame', (error, result) ->
 
@@ -19,7 +21,7 @@ Client Integration Tests for Games collection
 
 Subscribe to `singleGame` to access the collection
 
-            sub = Meteor.subscribe 'singleGame', result, ->
+            Meteor.subscribe 'singleGame', result, ->
               player =
                 name: Meteor.user().username
                 userId: Meteor.userId()
@@ -43,3 +45,17 @@ createdAt, then remove it for the comparison.
 
               expect(actualGame).toEqual expectedGame
               done()
+
+## Fail test
+
+      it 'should throw `access-denied` error if not logged in', (done) ->
+
+### Setup
+
+        Meteor.logout()
+
+### Execute
+
+        Meteor.call 'createGame', (error, result) ->
+          expect(error.error).toEqual 'access-denied'
+          done()
