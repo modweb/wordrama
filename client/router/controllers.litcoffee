@@ -1,10 +1,6 @@
 # Route Controllers
 
-Example controller
-
-```
-@RouteControllers =
-  example: RouteController.extend
-    waitOn: -> Meteor.subscribe 'example'
-    data: -> someDataExample: ExampleCollection.find()
-```
+    @RouteControllers =
+      singleGame: RouteController.extend
+        waitOn: -> Meteor.subscribe 'singleGame', this.params._id
+        data: -> game: Games.findOne()

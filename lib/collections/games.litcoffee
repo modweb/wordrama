@@ -12,22 +12,22 @@
       createdAt:
         type: Date
         autoValue: ->
-          return new Date if this.isInsert
-          return $setOnInsert: new Date if this.isUpsert
+          return new Date() if this.isInsert
+          return $setOnInsert: new Date() if this.isUpsert
           this.unset()
         optional: yes
       hasStarted:
         type: Boolean
         autoValue: ->
-          return value if this.isInsert
-          return $setOnInsert: value if this.isUpsert
+          return no if this.isInsert
+          return $setOnInsert: no if this.isUpsert
           this.unset()
         optional: yes
       hasFinished:
         type: Boolean
         autoValue: ->
-          return value if this.isInsert
-          return $setOnInsert: value if this.isUpsert
+          return no if this.isInsert
+          return $setOnInsert: no if this.isUpsert
           this.unset()
         optional: yes
       players:
@@ -67,9 +67,18 @@ TODO: use this.userId, how can we set Meteor.method context for tests?
 
         if not this.userId then throw new Meteor.Error 'access-denied', 'You must be logged in to create a game.'
 
+        user = Meteor.users.findOne this.userId
+        player =
+          name: user.username
+          userId: this.userId
         newGame =
           createdBy: this.userId
-          players: [ this.userId ]
+          players: [ player ]
           currentPlayersTurn: this.userId
 
         id = Games.insert newGame
+
+Navigate to game route
+
+        if Meteor.isClient then Router.go 'game', _id: id
+        return id
