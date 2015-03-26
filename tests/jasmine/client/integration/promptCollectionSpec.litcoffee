@@ -4,6 +4,12 @@
 
       beforeEach (done) -> ClientIntegrationTestHelpers.loginIfLoggedOut done
 
+      subscription = null
+
+      afterEach ->
+        subscription?.stop()
+        subscription = null
+
 ## Successfully create prompt
 
       it 'should create a prompt and attach it to a game if logged in', (done) ->
@@ -19,22 +25,23 @@ Create a new game to attach the prompt to
 
 ### Execute
 
-          console.log "gameId #{gameId}"
-
           Meteor.call 'insertPromptForGame', gameId, phrase, (error, result) ->
 
 ### Verify
 
             expect(error).toBeUndefined()
 
-            Meteor.subscribe 'singleGame', gameId, ->
+            subscription = Meteor.subscribe 'singleGame', gameId, ->
               actualGame = Games.findOne(gameId)
-              console.log actualGame
 
 The promptId for the game should match the prompt._id
 
               expect(actualGame.promptId).not.toBeUndefined()
               expect(actualGame.story).toEqual phrase
+
+### Teardown
+
+              Games.remove actualGame._id
               done()
 
 ## Fail on bad arguments
