@@ -2,18 +2,7 @@
 
     describe 'Create Prompt', ->
 
-      beforeEach (done) ->
-
-Log in if logged out
-
-        if not Meteor.userId()?
-          console.log 'logging in as testuser'
-          Meteor.loginWithPassword 'testuser','password', (error) ->
-            expect(error).toBeUndefined()
-            expect(Meteor.user()).not.toBeUndefined()
-            done()
-        else
-          done()
+      beforeEach (done) -> ClientIntegrationTestHelpers.loginIfLoggedOut done
 
 ## Successfully create prompt
 
