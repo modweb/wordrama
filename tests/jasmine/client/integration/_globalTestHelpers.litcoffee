@@ -10,3 +10,30 @@
             done()
         else
           done()
+
+    ((Meteor, Tracker, Router) ->
+      isRouterReady = no
+      callbacks = [];
+
+      @waitForRouter = (callback) ->
+        if isRouterReady
+          callback()
+        else
+          callbacks.push callback
+
+      Router.onAfterAction ->
+        if !isRouterReady && this.ready()
+          Tracker.afterFlush ->
+            isRouterReady = yes
+            callbacks.forEach (callback) ->
+              callback()
+            callbacks = []
+
+      Router.onRerun ->
+        isRouterReady = no
+        this.next()
+
+      Router.onStop ->
+        isRouterReady = no
+        if this.next then this.next()
+    )(Meteor, Tracker, Router)

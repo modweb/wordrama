@@ -6,3 +6,4 @@
       @route 'game',
         path: 'game/:_id'
         controller: 'RouteControllers.singleGame'
+      @route 'games'

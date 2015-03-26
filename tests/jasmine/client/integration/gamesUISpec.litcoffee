@@ -4,28 +4,42 @@
 
       beforeEach (done) -> ClientIntegrationTestHelpers.loginIfLoggedOut done
 
+      beforeEach (done) ->
+        Router.go 'games'
+        Tracker.afterFlush done
+
+      beforeEach waitForRouter
+
 # Create new game when 'create new game' button is clicked
 
       it 'should create a new game and navigate to game route when create new game button is clicked', (done) ->
-
-### Setup
-
-Navigate to the games page
-
-        Router.go 'games'
 
 ### Execute
 
         $('#createGame').trigger 'click'
 
+setTimeout is necessary to wait for Iron Router to do it's thing.
+TODO: there must be a better way to do this!
+
+        Meteor.setTimeout ->
+
 ### Verify
 
-Wait 100ms?
+          currentRoute = Router.current().route
 
-        currentRoute = Router.current()
+          expect(currentRoute.getName()).toEqual 'game'
 
-        expect(currentRoute.name).toEqual 'game'
+We should have one game in the data context
 
-        gameData = currentRoute.data().game
+          numberOfGames = Games.find().count()
+          expect(numberOfGames).toEqual 1
 
-        expect(Match.test gameData, GameSchema).toBeTruthy()
+          game = Games.findOne()
+          expect(Router.current().params._id).toEqual game._id
+
+The game should match the game schema
+Strip game of _id to match GameSchema
+
+          expect(Match.test (_.omit game, '_id'), GameSchema).toBeTruthy()
+          done()
+        , 100
