@@ -12,6 +12,8 @@ Log in if logged out
             expect(error).toBeUndefined()
             expect(Meteor.user()).not.toBeUndefined()
             done()
+        else
+          done()
 
 ## Successfully create prompt
 
@@ -60,7 +62,11 @@ The promptId for the game should match the prompt._id
 
 ### Verify
 
-          expect(error.error).toEqual 'bad-args'
+Expect a Match.Error 400
+
+          console.log 'bad args!', error.error
+
+          expect(error.error).toEqual 400
           done()
 
 ## Fail on missing game
@@ -90,7 +96,7 @@ The promptId for the game should match the prompt._id
 
 ### Execute
 
-        Meteor.call 'insertPromptForGame', 'fakeGameId', (error, result) ->
+        Meteor.call 'insertPromptForGame', 'fakeGameId', 'whatever prompt', (error, result) ->
 
 ### Verify
 
