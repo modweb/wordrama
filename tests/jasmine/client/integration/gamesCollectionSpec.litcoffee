@@ -2,6 +2,12 @@
 
     describe 'Create Game', ->
 
+      subscription = null
+
+      afterEach ->
+        subscription?.stop()
+        subscription = null
+
 ## Success test
 
       it 'should create a new game if logged in', (done) ->
@@ -21,7 +27,9 @@
 
 Subscribe to `singleGame` to access the collection
 
-            Meteor.subscribe 'singleGame', result, ->
+### Verify
+
+            subscription = Meteor.subscribe 'singleGame', result, () ->
               player =
                 name: Meteor.user().username
                 userId: Meteor.userId()
