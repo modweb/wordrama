@@ -1,4 +1,4 @@
-# Client Integration Tests for Games collection
+# Create Game
 
     describe 'Create Game', ->
 
@@ -67,6 +67,8 @@ createdAt, then remove it for the comparison.
         Meteor.call 'createGame', (error, result) ->
           expect(error.error).toEqual 'access-denied'
           done()
+
+# Start Game
 
     describe 'Start Game', ->
 
@@ -256,3 +258,58 @@ Subscribe to `singleGame` to access the collection
 
           expect(error.error).toEqual 'game-not-found'
           done()
+
+# Join Game
+
+    describe 'Join Game', ->
+
+Keep track of subscription to clean at the end of the test.
+
+      subscription = null
+
+      afterEach ->
+        subscription?.stop()
+        subscription = null
+
+      beforeEach ClientIntegrationTestHelpers.loginIfLoggedOut
+
+## Successfully join game
+
+      it 'should successfully join a newly created game', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        delete dummyGame.promptId
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Logout of testuser
+
+          Meteor.logout ->
+
+Login as testuser2
+
+            Meteor.loginWithPassword 'testuser2','password', (error) ->
+              expect(error).toBeUndefined()
+              expect(Meteor.user()).not.toBeUndefined()
+
+Subscribe to `singleGame` to access the collection
+
+            subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+              Meteor.call 'joinGame', gameId, (error, result) ->
+
+### Verify
+
+                actualGame = Games.findOne()
+
+                player =
+                  userId: Meteor.userId()
+                  name: Meteor.user().username
+                testuser2IsInGame = _.findWhere actualGame.players, player
+                expect(testuser2IsInGame).toBeTruthy()
