@@ -10,6 +10,26 @@
             done()
         else
           done()
+      getDummyGame: ->
+        players = [
+          name: 'player1'
+          userId: 'asdfasdfasdfasdf1'
+        ,
+          name: 'player2'
+          userId: 'asdfasdfasdfasdf2'
+        ,
+          name: 'player2'
+          userId: 'asdfasdfasdfasdf2'
+        ]
+        dummyGame =
+          createdBy: 'asdfasdfasdfasdf1'
+          createdAt: new Date()
+          hasStarted: yes
+          hasFinished: no
+          players: players
+          currentPlayersTurn: 'asdfasdfasdfasdf1'
+          promptId: 'asdfasdfasdfasdf1'
+          story: 'This is a story prompt and'
 
     ((Meteor, Tracker, Router) ->
       isRouterReady = no
