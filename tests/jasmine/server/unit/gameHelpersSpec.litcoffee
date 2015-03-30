@@ -23,6 +23,6 @@
     describe 'Rotate Turns', ->
 
       it 'should return the next player', ->
-        actualNextPlayerId = GameHelpers.getNextTurnPlayerId testGame
+        actualNextPlayerId = GameHelpers.getNextPlayerTurnId testGame
         expectedNextPlayerId = players[1].userId
         expect(actualNextPlayerId).toEqual expectedNextPlayerId

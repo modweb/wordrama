@@ -82,3 +82,19 @@ Navigate to game route
 
         if Meteor.isClient then Router.go 'game', _id: id
         return id
+
+## Server Helper Methods
+
+    @GameHelpers =
+      getNextPlayerTurnId: (game) ->
+        check game, GameSchema
+
+Get the current currentPlayersTurn's index in players
+
+        indexCurrentPlayerTurn = 0
+        _.each game.players, (player, index) ->
+          if player.userId is game.currentPlayersTurn
+            indexCurrentPlayerTurn = index
+            return
+        indexNextPlayerTurn = (indexCurrentPlayerTurn + 1) % game.players.length
+        nextplayerTurnId = game.players[indexNextPlayerTurn].userId
