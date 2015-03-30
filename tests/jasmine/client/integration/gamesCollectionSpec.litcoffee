@@ -132,7 +132,6 @@ Subscribe to `singleGame` to access the collection
 ### Setup
 
         dummyGame = ClientIntegrationTestHelpers.getDummyGame()
-        dummyGame.hasStarted = yes
         Games.insert dummyGame, (error, result) ->
           expect(error).toBeUndefined()
           gameId = result
@@ -147,8 +146,7 @@ Subscribe to `singleGame` to access the collection
                 hasStarted: yes
 
             Games.update criteria, update, (error, result) ->
-              console.log error if error?
-              
+
 ### Execute
 
               Meteor.call 'startGame', gameId, (error, result) ->
@@ -173,18 +171,21 @@ Subscribe to `singleGame` to access the collection
 
           subscription = Meteor.subscribe 'singleGame', gameId, ->
 
-            Games.update _id: result,
+            criteria = _id: gameId
+            action =
               $set:
                 hasFinished: yes
 
+            Games.update criteria, action, (error, result) ->
+
 ### Execute
 
-            Meteor.call 'startGame', gameId, (error, result) ->
+              Meteor.call 'startGame', gameId, (error, result) ->
 
 ### Verify
 
-              expect(error.error).toEqual 'game-already-finished'
-              done()
+                expect(error.error).toEqual 'game-already-finished'
+                done()
 
 ## Fail when promptId isn't set
 

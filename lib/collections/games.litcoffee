@@ -113,6 +113,9 @@ Check that game has enough players
 
 Check that game hasn't finished
 
+        if game.hasFinished
+          throw new Meteor.Error 'game-already-finished', "Game with id #{gameId} has already finished"
+
 Check that game isn't missing story
 
 Check that game isn't missing promptId
