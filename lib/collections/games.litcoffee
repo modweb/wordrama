@@ -95,7 +95,9 @@ Navigate to game route
 
 Lookup game, error if not found
 
-        game = Games.findOne _id: gameId
+        criteria =
+          _id: gameId
+        game = Games.findOne criteria
 
         console.log game
         if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found."
@@ -128,6 +130,11 @@ Check that game isn't missing promptId
 
 Start game!
 
+        action =
+          $set:
+            hasStarted: yes
+
+        Games.update criteria, action
 
 ## Server Helper Methods
 
