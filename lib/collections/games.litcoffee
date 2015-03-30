@@ -120,6 +120,9 @@ Check that game isn't missing story
 
 Check that game isn't missing promptId
 
+        if  not game.promptId?
+          throw new Meteor.Error 'game-missing-promptId', "Game with id #{gameId} is missing promptId"
+
 Start game!
 
 
