@@ -308,8 +308,14 @@ Subscribe to `singleGame` to access the collection
 
                 actualGame = Games.findOne()
 
+                console.log actualGame
+
                 player =
                   userId: Meteor.userId()
                   name: Meteor.user().username
+
+Check if the user is in the game
+
                 testuser2IsInGame = _.findWhere actualGame.players, player
                 expect(testuser2IsInGame).toBeTruthy()
+                done()

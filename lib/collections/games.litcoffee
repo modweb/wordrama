@@ -59,8 +59,6 @@ maxPlayers
         player =
           userId: Meteor.userId()
           name: Meteor.user().username
-        console.log doc.players, player
-        console.log "conatains:", (_.findWhere doc.players, player)?
         (_.findWhere doc.players, player)? and doc.hasFinished is no
       remove: (userId, doc) -> no
 
@@ -91,6 +89,8 @@ Navigate to game route
         if Meteor.isClient then Router.go 'game', _id: id
         return id
 
+## Start Game
+
       startGame: (gameId) ->
 
 Lookup game, error if not found
@@ -99,7 +99,6 @@ Lookup game, error if not found
           _id: gameId
         game = Games.findOne criteria
 
-        console.log game
         if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found."
 
 Check that game hasn't started
@@ -135,6 +134,32 @@ Start game!
             hasStarted: yes
 
         Games.update criteria, action
+
+## Join Game
+
+      joinGame: (gameId) ->
+
+Lookup game
+
+        criteria =
+          _id: gameId
+        game = Games.findOne criteria
+
+Create new player
+
+        player =
+          userId: Meteor.userId()
+          name: Meteor.user().username
+
+Update action
+
+        action =
+          $addToSet: players: player
+
+Add player to the game
+
+        Games.update criteria, action
+
 
 ## Server Helper Methods
 
