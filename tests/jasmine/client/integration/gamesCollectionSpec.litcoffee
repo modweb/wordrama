@@ -219,17 +219,16 @@ Subscribe to `singleGame` to access the collection
 
 ### Setup
 
-        Games.insert ClientIntegrationTestHelpers.getDummyGame(), (error, result) ->
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        delete dummyGame.story
+
+        Games.insert dummyGame, (error, result) ->
           expect(error).toBeUndefined()
           gameId = result
 
 Subscribe to `singleGame` to access the collection
 
           subscription = Meteor.subscribe 'singleGame', gameId, ->
-
-            Games.update gameId,
-              $unset:
-                story: yes
 
 ### Execute
 

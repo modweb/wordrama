@@ -118,6 +118,9 @@ Check that game hasn't finished
 
 Check that game isn't missing story
 
+        if not game.story?
+          throw new Meteor.Error 'game-missing-story', "Game with id #{gameId} is missing story"
+
 Check that game isn't missing promptId
 
         if  not game.promptId?
