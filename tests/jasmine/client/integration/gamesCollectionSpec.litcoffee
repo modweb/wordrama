@@ -70,7 +70,7 @@ createdAt, then remove it for the comparison.
 
     describe 'Start Game', ->
 
-Keep track of subscript to clean at the end of the test.
+Keep track of subscription to clean at the end of the test.
 
       subscription = null
 
@@ -80,48 +80,50 @@ Keep track of subscript to clean at the end of the test.
 
       beforeEach ClientIntegrationTestHelpers.loginIfLoggedOut
 
+## Success test start game
+
       it 'should start the game and set properties appropriately', (done) ->
 
 ### Setup
 
-        gameId = Games.insert ClientIntegrationTestHelpers.getDummyGame
-
-### Execute
-
-        Meteor.call 'startGame', gameId, (error, result) ->
-
+        Games.insert ClientIntegrationTestHelpers.getDummyGame(), (error, result) ->
           expect(error).toBeUndefined()
+          gameId = result
 
 Subscribe to `singleGame` to access the collection
 
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+            Meteor.call 'startGame', gameId, (error, result) ->
+              expect(error).toBeUndefined()
+
 ### Verify
 
-          subscription = Meteor.subscribe 'singleGame', result, () ->
+              actualGame = Games.findOne()
+              expect(actualGame.hasStarted).toBeTruthy()
+              done()
 
-            actualGame = Games.findOne()
-            expect(actualGame.hasStarted).toBeTruthy()
-            done()
+## Start game, throw error is < 2 players
 
       it 'should throw an error if < 2 players', (done) ->
 
 ### Setup
 
-        gameId = Games.insert ClientIntegrationTestHelpers.getDummyGame
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        dummyGame.players = [dummyGame.players[0]]
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
 
-        Games.update gameId,
-          $set:
-            players: [
-              userId: 'asdfasdfasdfasdf1'
-              name: 'oneLonelyPlayer1'
-            ]
+Subscribe to `singleGame` to access the collection
 
-### Execute
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
 
-        Meteor.call 'startGame', gameId, (error, result) ->
+            Meteor.call 'startGame', gameId, (error, result) ->
 
 ### Verify
 
-          expect(error.error).toEqual 'not-enough-players'
+              expect(error.error).toEqual 'not-enough-players'
+              done()
 
 ## Fail when game already started
 
@@ -129,20 +131,33 @@ Subscribe to `singleGame` to access the collection
 
 ### Setup
 
-        gameId = Games.insert ClientIntegrationTestHelpers.getDummyGame
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        dummyGame.hasStarted = yes
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
 
-        Games.update gameId,
-          $set:
-            hasStarted: yes
+Subscribe to `singleGame` to access the collection
 
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+            criteria = _id: gameId
+            update =
+              $set:
+                hasStarted: yes
+
+            Games.update criteria, update, (error, result) ->
+              console.log error if error?
+              
 ### Execute
 
-        Meteor.call 'startGame', gameId, (error, result) ->
+              Meteor.call 'startGame', gameId, (error, result) ->
 
 ### Verify
 
-          expect(error.error).toEqual 'game-already-started'
-          done()
+                console.log "THE FUCKING ERROR", error
+                expect(error?.error).toEqual 'game-already-started'
+                done()
 
 ## Fail when game already finished
 
@@ -150,20 +165,26 @@ Subscribe to `singleGame` to access the collection
 
 ### Setup
 
-        gameId = Games.insert ClientIntegrationTestHelpers.getDummyGame
+        Games.insert ClientIntegrationTestHelpers.getDummyGame(), (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
 
-        Games.update gameId,
-          $set:
-            hasFinished: yes
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+            Games.update _id: result,
+              $set:
+                hasFinished: yes
 
 ### Execute
 
-        Meteor.call 'startGame', gameId, (error, result) ->
+            Meteor.call 'startGame', gameId, (error, result) ->
 
 ### Verify
 
-          expect(error.error).toEqual 'game-already-finished'
-          done()
+              expect(error.error).toEqual 'game-already-finished'
+              done()
 
 ## Fail when promptId isn't set
 
@@ -171,20 +192,25 @@ Subscribe to `singleGame` to access the collection
 
 ### Setup
 
-        gameId = Games.insert ClientIntegrationTestHelpers.getDummyGame
+        Games.insert ClientIntegrationTestHelpers.getDummyGame(), (error, result) ->
+          expect(error).toBeUndefined()
 
-        Games.update gameId,
-          $unset:
-            promptId: yes
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', result, ->
+
+            Games.update gameId,
+              $unset:
+                promptId: yes
 
 ### Execute
 
-        Meteor.call 'startGame', gameId, (error, result) ->
+            Meteor.call 'startGame', gameId, (error, result) ->
 
 ### Verify
 
-          expect(error.error).toEqual 'game-missing-promptId'
-          done()
+              expect(error.error).toEqual 'game-missing-promptId'
+              done()
 
 ## Fail when story isn't set
 
@@ -192,24 +218,30 @@ Subscribe to `singleGame` to access the collection
 
 ### Setup
 
-        gameId = Games.insert ClientIntegrationTestHelpers.getDummyGame
+        Games.insert ClientIntegrationTestHelpers.getDummyGame(), (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
 
-        Games.update gameId,
-          $unset:
-            story: yes
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+            Games.update gameId,
+              $unset:
+                story: yes
 
 ### Execute
 
-        Meteor.call 'startGame', gameId, (error, result) ->
+            Meteor.call 'startGame', gameId, (error, result) ->
 
 ### Verify
 
-          expect(error.error).toEqual 'game-missing-story'
-          done()
+              expect(error.error).toEqual 'game-missing-story'
+              done()
 
 ## Fail when game isn't found
 
-      it 'should throw an error if game is missing story', (done) ->
+      it 'should throw an error if game is not found', (done) ->
 
 ### Setup
 

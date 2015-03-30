@@ -12,23 +12,23 @@
           done()
       getDummyGame: ->
         players = [
-          name: 'player1'
-          userId: 'asdfasdfasdfasdf1'
+          name: Meteor.user().username
+          userId: Meteor.userId()
         ,
           name: 'player2'
-          userId: 'asdfasdfasdfasdf2'
+          userId: 'xC8Bg3dCofQokrKya'
         ,
           name: 'player2'
-          userId: 'asdfasdfasdfasdf2'
+          userId: 'ZscuWK2NaJZzxM2Qy'
         ]
         dummyGame =
-          createdBy: 'asdfasdfasdfasdf1'
+          createdBy: 'TrsEfALFJacgug3sW'
           createdAt: new Date()
           hasStarted: yes
           hasFinished: no
           players: players
-          currentPlayersTurn: 'asdfasdfasdfasdf1'
-          promptId: 'asdfasdfasdfasdf1'
+          currentPlayersTurn: 'TrsEfALFJacgug3sW'
+          promptId: 'f7z453Jum537vBS2h'
           story: 'This is a story prompt and'
 
     ((Meteor, Tracker, Router) ->

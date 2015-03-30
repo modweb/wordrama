@@ -4,11 +4,13 @@
       name:
         type: String
       userId:
-        type: SimpleSchema.RegEx.Id
+        type: String
+        regEx: SimpleSchema.RegEx.Id
 
     @GameSchema = new SimpleSchema
       createdBy:
-        type: SimpleSchema.RegEx.Id
+        type: String
+        regEx: SimpleSchema.RegEx.Id
       createdAt:
         type: Date
         autoValue: ->
@@ -21,21 +23,21 @@
         autoValue: ->
           return no if this.isInsert
           return $setOnInsert: no if this.isUpsert
-          this.unset()
         optional: yes
       hasFinished:
         type: Boolean
         autoValue: ->
           return no if this.isInsert
           return $setOnInsert: no if this.isUpsert
-          this.unset()
         optional: yes
       players:
         type: [ PlayerSchema ]
       currentPlayersTurn:
-        type: SimpleSchema.RegEx.Id
+        type: String
+        regEx: SimpleSchema.RegEx.Id
       promptId:
-        type: SimpleSchema.RegEx.Id
+        type: String
+        regEx: SimpleSchema.RegEx.Id
         optional: yes
       story:
         type: String
@@ -53,7 +55,13 @@ maxPlayers
 
     Games.allow
       insert: (userId, doc) -> Meteor.userId() isnt null
-      update: (userId, doc, fieldNames, modifier) -> _.contains doc.players, Meteor.userId()
+      update: (userId, doc, fieldNames, modifier) ->
+        player =
+          userId: Meteor.userId()
+          name: Meteor.user().username
+        console.log doc.players, player
+        console.log "conatains:", (_.findWhere doc.players, player)?
+        (_.findWhere doc.players, player)? and doc.hasFinished is no
       remove: (userId, doc) -> no
 
 ## Meteor Methods
@@ -87,11 +95,21 @@ Navigate to game route
 
 Lookup game, error if not found
 
-        game = Games.findOne gameId
+        game = Games.findOne _id: gameId
 
+        console.log game
         if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found."
 
 Check that game hasn't started
+
+        if game.hasStarted
+          console.log "GOOD JOB"
+          throw new Meteor.Error 'game-already-started', "Game with id #{gameId} has already started"
+
+Check that game has enough players
+
+        if game.players.length < 2
+          throw new Meteor.Error 'not-enough-players', "Game with id #{gameId} only has #{game.players.length} player, at least 2 players are required to start the game"
 
 Check that game hasn't finished
 
