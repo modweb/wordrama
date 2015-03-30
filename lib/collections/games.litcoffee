@@ -83,6 +83,25 @@ Navigate to game route
         if Meteor.isClient then Router.go 'game', _id: id
         return id
 
+      startGame: (gameId) ->
+
+Lookup game, error if not found
+
+        game = Games.findOne gameId
+
+        if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found."
+
+Check that game hasn't started
+
+Check that game hasn't finished
+
+Check that game isn't missing story
+
+Check that game isn't missing promptId
+
+Start game!
+
+
 ## Server Helper Methods
 
     @GameHelpers =
