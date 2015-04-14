@@ -298,24 +298,71 @@ Login as testuser2
 
 Subscribe to `singleGame` to access the collection
 
-            subscription = Meteor.subscribe 'singleGame', gameId, ->
+              subscription = Meteor.subscribe 'singleGame', gameId, ->
 
 ### Execute
 
-              Meteor.call 'joinGame', gameId, (error, result) ->
+                Meteor.call 'joinGame', gameId, (error, result) ->
 
 ### Verify
 
-                actualGame = Games.findOne()
+                  actualGame = Games.findOne()
 
-                console.log actualGame
+                  console.log actualGame
 
-                player =
-                  userId: Meteor.userId()
-                  name: Meteor.user().username
+                  player =
+                    userId: Meteor.userId()
+                    name: Meteor.user().username
 
 Check if the user is in the game
 
-                testuser2IsInGame = _.findWhere actualGame.players, player
-                expect(testuser2IsInGame).toBeTruthy()
-                done()
+                  testuser2IsInGame = _.findWhere actualGame.players, player
+                  expect(testuser2IsInGame).toBeTruthy()
+                  done()
+
+## Successfully join game
+
+      it 'should successfully throw an error on rejoining a game', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        delete dummyGame.promptId
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Logout of testuser
+
+          Meteor.logout ->
+
+Login as testuser2
+
+            Meteor.loginWithPassword 'testuser2','password', (error) ->
+              expect(error).toBeUndefined()
+              expect(Meteor.user()).not.toBeUndefined()
+
+Subscribe to `singleGame` to access the collection
+
+              subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+                Meteor.call 'joinGame', gameId, (error, result) ->
+
+                  actualGame = Games.findOne()
+
+
+                  player =
+                    userId: Meteor.userId()
+                    name: Meteor.user().username
+
+Check if the user is in the game
+
+                  testuser2IsInGame = _.findWhere actualGame.players, player
+                  expect(testuser2IsInGame).toBeTruthy()
+
+                  Meteor.call 'joinGame', gameId, (error, result) ->
+                    expect(error.error).toEqual 'already-joined-game'
+                    done()

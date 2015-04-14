@@ -15,11 +15,8 @@
           name: Meteor.user().username
           userId: Meteor.userId()
         ,
-          name: 'player2'
-          userId: 'xC8Bg3dCofQokrKya'
-        ,
-          name: 'player2'
-          userId: 'ZscuWK2NaJZzxM2Qy'
+          name: 'fakeplayer'
+          userId: 'xC8Bg3dCofQokrKy3'
         ]
         dummyGame =
           createdBy: 'TrsEfALFJacgug3sW'

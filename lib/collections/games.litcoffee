@@ -104,7 +104,6 @@ Lookup game, error if not found
 Check that game hasn't started
 
         if game.hasStarted
-          console.log "GOOD JOB"
           throw new Meteor.Error 'game-already-started', "Game with id #{gameId} has already started"
 
 Check that game has enough players
@@ -139,6 +138,8 @@ Start game!
 
       joinGame: (gameId) ->
 
+        if not Meteor.user()? then throw new Meteor.Error 'not-logged-in', 'You must be logged in to join a game'
+
 Lookup game
 
         criteria =
@@ -149,7 +150,15 @@ Create new player
 
         player =
           userId: Meteor.userId()
-          name: Meteor.user().username
+          name: Meteor.user()?.username
+
+Check if player is already in game.
+
+        hasAlreadyJoined = !!_.findWhere game.players, userId: Meteor.userId()
+
+        if hasAlreadyJoined then console.log "user has already joined game", game, player
+
+        if hasAlreadyJoined then throw new Meteor.Error 'already-joined-game', "You (#{Meteor.userId()}) have already joined game with id #{gameId} #{hasAlreadyJoined} #{player}"
 
 Update action
 
