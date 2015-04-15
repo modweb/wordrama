@@ -93,6 +93,8 @@ Navigate to game route
 
       startGame: (gameId) ->
 
+        if not Meteor.user()? then throw new Meteor.Error 'not-logged-in', 'You must be logged in to start a game'
+
 Lookup game, error if not found
 
         criteria =

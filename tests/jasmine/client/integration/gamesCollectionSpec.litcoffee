@@ -127,6 +127,38 @@ Subscribe to `singleGame` to access the collection
               expect(error.error).toEqual 'not-enough-players'
               done()
 
+## Start Game; Fail if not logged in
+
+      it 'should throw an error if user is not logged in', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+            criteria = _id: gameId
+            update =
+              $set:
+                hasStarted: yes
+
+            Games.update criteria, update, (error, result) ->
+
+### Execute
+
+              Meteor.logout ->
+                Meteor.call 'startGame', gameId, (error, result) ->
+
+### Verify
+
+                  expect(error?.error).toEqual 'not-logged-in'
+                  done()
+
 ## Fail when game already started
 
       it 'should throw an error if game has already started', (done) ->
@@ -155,7 +187,6 @@ Subscribe to `singleGame` to access the collection
 
 ### Verify
 
-                console.log "THE FUCKING ERROR", error
                 expect(error?.error).toEqual 'game-already-started'
                 done()
 
