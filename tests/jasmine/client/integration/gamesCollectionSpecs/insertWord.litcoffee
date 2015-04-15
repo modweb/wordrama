@@ -45,7 +45,7 @@ Subscribe to `singleGame` to access the collection
                 expect(actualGame.currentPlayersTurn).toEqual dummyGame.players[1].userId
                 done()
 
-## Success path
+## Not logged in
 
       it 'should throw an error if not logged in', (done) ->
 
@@ -75,3 +75,21 @@ Subscribe to `singleGame` to access the collection
 
                   expect(error.error).toEqual 'not-logged-in'
                   done()
+
+## Game not found
+
+      it 'should throw an error if game not found', (done) ->
+
+### Setup
+
+        badGameId = 'fakeGameId'
+        word = 'word'
+
+### Execute
+
+        Meteor.call 'insertWord', badGameId, word, (error, result) ->
+
+### Verify
+
+          expect(error.error).toEqual 'game-not-found'
+          done()
