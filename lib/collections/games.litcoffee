@@ -188,6 +188,8 @@ Add player to the game
 
 TODO: check that game has started
 
+        if not game.hasStarted then throw new Meteor.Error 'game-hasnt-started', "Game with id #{gameId} hasn't started yet"
+
 TODO: check that it is user's turn
 
         action =

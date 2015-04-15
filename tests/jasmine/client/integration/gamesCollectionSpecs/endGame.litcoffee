@@ -30,17 +30,20 @@ Subscribe to `singleGame` to access the collection
 
 ### Execute
 
-            Meteor.call 'endGame', gameId, (error, result) ->
+            Meteor.call 'startGame', gameId, (error, result) ->
               expect(error).toBeUndefined()
 
-              actualGame = Games.findOne()
+              Meteor.call 'endGame', gameId, (error, result) ->
+                expect(error).toBeUndefined()
+
+                actualGame = Games.findOne()
 
 ### Verify
 
 Verify that the game has ended
 
-              expect(actualGame.hasFinished).toBeTruthy()
-              done()
+                expect(actualGame.hasFinished).toBeTruthy()
+                done()
 
 ## Fail if not logged in
 
@@ -104,17 +107,20 @@ Subscribe to `singleGame` to access the collection
 
 ### Execute
 
-            Meteor.call 'endGame', gameId, (error, result) ->
-              expect(error).toBeUndefined()
+              Meteor.call 'startGame', gameId, (error, result) ->
+                expect(error).toBeUndefined()
 
-              actualGame = Games.findOne()
+              Meteor.call 'endGame', gameId, (error, result) ->
+                expect(error).toBeUndefined()
+
+                actualGame = Games.findOne()
 
 Verify that the game has ended
 
-              expect(actualGame.hasFinished).toBeTruthy()
+                expect(actualGame.hasFinished).toBeTruthy()
 
 ### Verify
 
-              Meteor.call 'endGame', gameId, (error, result) ->
-                expect(error?.error).toEqual 'game-already-ended'
-                done()
+                Meteor.call 'endGame', gameId, (error, result) ->
+                  expect(error?.error).toEqual 'game-already-ended'
+                  done()
