@@ -119,3 +119,35 @@ Subscribe to `singleGame` to access the collection
 
               expect(error.error).toEqual 'game-hasnt-started'
               done()
+
+## Game already ended
+
+      it 'should throw an error if game already ended', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+            Meteor.call 'startGame', gameId, (error, result) ->
+              expect(error).toBeUndefined()
+
+              Meteor.call 'endGame', gameId, (error, result) ->
+                expect(error).toBeUndefined()
+
+                word = 'test'
+                Meteor.call 'insertWord', gameId, word, (error, result) ->
+
+### Verify
+
+                  expect(error.error).toEqual 'game-already-ended'
+                  done()
