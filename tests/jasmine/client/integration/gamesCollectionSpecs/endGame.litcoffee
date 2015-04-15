@@ -12,14 +12,13 @@ Keep track of subscription to clean at the end of the test.
 
       beforeEach ClientIntegrationTestHelpers.loginIfLoggedOut
 
-# Success path
+## Success path
 
       it 'should successfully end a newly created game', (done) ->
 
 ### Setup
 
         dummyGame = ClientIntegrationTestHelpers.getDummyGame()
-        delete dummyGame.promptId
 
         Games.insert dummyGame, (error, result) ->
           expect(error).toBeUndefined()
@@ -50,7 +49,6 @@ Verify that the game has ended
 ### Setup
 
         dummyGame = ClientIntegrationTestHelpers.getDummyGame()
-        delete dummyGame.promptId
 
         Games.insert dummyGame, (error, result) ->
           expect(error).toBeUndefined()
