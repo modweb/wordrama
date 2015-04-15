@@ -171,6 +171,30 @@ Add player to the game
 
         Games.update criteria, action
 
+## End Game
+
+      endGame: (gameId) ->
+
+TODO: check if user is logged in
+
+        criteria =
+          _id: gameId
+
+        game = Games.findOne criteria
+
+TODO: check that game was found
+
+TODO: check that game hasn't already finished
+
+TODO: check that game has started
+
+TODO: check that it is user's turn
+
+        action =
+          $set:
+            hasFinished: yes
+
+        Games.update criteria, action
 
 ## Server Helper Methods
 
