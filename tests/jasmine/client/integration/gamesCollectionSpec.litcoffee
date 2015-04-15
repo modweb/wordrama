@@ -320,9 +320,9 @@ Check if the user is in the game
                   expect(testuser2IsInGame).toBeTruthy()
                   done()
 
-## Successfully join game
+## Error on rejoin game
 
-      it 'should successfully throw an error on rejoining a game', (done) ->
+      it 'should throw an error on rejoining a game', (done) ->
 
 ### Setup
 
@@ -366,3 +366,29 @@ Check if the user is in the game
                   Meteor.call 'joinGame', gameId, (error, result) ->
                     expect(error.error).toEqual 'already-joined-game'
                     done()
+
+## Error on join game and not logge din
+
+      it 'should throw an error on joining a game and not logged in', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        delete dummyGame.promptId
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Logout of testuser
+
+          Meteor.logout ->
+
+### Execute
+
+            Meteor.call 'joinGame', gameId, (error, result) ->
+
+### Verify
+
+              expect(error.error).toEqual 'not-logged-in'
+              done()
