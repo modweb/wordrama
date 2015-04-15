@@ -182,7 +182,7 @@ Add player to the game
 
         game = Games.findOne criteria
 
-TODO: check that game was found
+        if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found"
 
 TODO: check that game hasn't already finished
 

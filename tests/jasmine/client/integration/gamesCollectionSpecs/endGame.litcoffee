@@ -70,3 +70,20 @@ Subscribe to `singleGame` to access the collection
 
                 expect(error?.error).toEqual 'not-logged-in'
                 done()
+
+## Error if game isn't found
+
+      it 'should throw an error if game is not found', (done) ->
+
+### Setup
+
+        badGameId = 'thisisfake'
+
+### Execute
+
+        Meteor.call 'endGame', badGameId, (error, result) ->
+
+### Verify
+
+          expect(error?.error).toEqual 'game-not-found'
+          done()
