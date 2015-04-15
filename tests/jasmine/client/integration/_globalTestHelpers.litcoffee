@@ -24,7 +24,7 @@
           hasStarted: yes
           hasFinished: no
           players: players
-          currentPlayersTurn: 'TrsEfALFJacgug3sW'
+          currentPlayersTurn: Meteor.userId()
           promptId: 'f7z453Jum537vBS2h'
           story: 'This is a story prompt and'
 

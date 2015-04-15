@@ -186,11 +186,9 @@ Add player to the game
 
         if game.hasFinished then throw new Meteor.Error 'game-already-ended', "Game with id #{gameId} has already finished"
 
-TODO: check that game has started
-
         if not game.hasStarted then throw new Meteor.Error 'game-hasnt-started', "Game with id #{gameId} hasn't started yet"
 
-TODO: check that it is user's turn
+        if game.currentPlayersTurn isnt @userId then throw new Meteor.Error 'not-your-turn', "Games can only be ended if it's your turn"
 
         action =
           $set:

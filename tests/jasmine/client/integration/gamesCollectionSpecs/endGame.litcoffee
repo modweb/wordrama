@@ -89,7 +89,7 @@ Subscribe to `singleGame` to access the collection
           expect(error?.error).toEqual 'game-not-found'
           done()
 
-# Error if game already finished
+## Error if game already finished
 
       it 'should throw an error if game has already finished', (done) ->
 
@@ -107,8 +107,8 @@ Subscribe to `singleGame` to access the collection
 
 ### Execute
 
-              Meteor.call 'startGame', gameId, (error, result) ->
-                expect(error).toBeUndefined()
+            Meteor.call 'startGame', gameId, (error, result) ->
+              expect(error).toBeUndefined()
 
               Meteor.call 'endGame', gameId, (error, result) ->
                 expect(error).toBeUndefined()
@@ -124,3 +124,32 @@ Verify that the game has ended
                 Meteor.call 'endGame', gameId, (error, result) ->
                   expect(error?.error).toEqual 'game-already-ended'
                   done()
+
+## Error if not current users turn
+
+      it 'should throw an error if not current users turn', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        dummyGame.currentPlayersTurn = 'xC8Bg3dCofQokrKy3'
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+            Meteor.call 'startGame', gameId, (error, result) ->
+              expect(error).toBeUndefined()
+
+              Meteor.call 'endGame', gameId, (error, result) ->
+
+### Verify
+
+                expect(error?.error).toEqual 'not-your-turn'
+                done()
