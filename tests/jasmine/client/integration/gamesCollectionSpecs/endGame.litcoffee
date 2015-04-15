@@ -85,3 +85,36 @@ Subscribe to `singleGame` to access the collection
 
           expect(error?.error).toEqual 'game-not-found'
           done()
+
+# Error if game already finished
+
+      it 'should throw an error if game has already finished', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+            Meteor.call 'endGame', gameId, (error, result) ->
+              expect(error).toBeUndefined()
+
+              actualGame = Games.findOne()
+
+Verify that the game has ended
+
+              expect(actualGame.hasFinished).toBeTruthy()
+
+### Verify
+
+              Meteor.call 'endGame', gameId, (error, result) ->
+                expect(error?.error).toEqual 'game-already-ended'
+                done()

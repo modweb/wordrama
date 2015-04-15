@@ -184,7 +184,7 @@ Add player to the game
 
         if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found"
 
-TODO: check that game hasn't already finished
+        if game.hasFinished then throw new Meteor.Error 'game-already-ended', "Game with id #{gameId} has already finished"
 
 TODO: check that game has started
 
