@@ -151,3 +151,33 @@ Subscribe to `singleGame` to access the collection
 
                   expect(error.error).toEqual 'game-already-ended'
                   done()
+
+## Not your turn
+
+      it 'should throw an error if not your turn', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        dummyGame.currentPlayersTurn = 'xC8Bg3dCofQokrKy3'
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+            Meteor.call 'startGame', gameId, (error, result) ->
+              expect(error).toBeUndefined()
+
+              word = 'test'
+              Meteor.call 'insertWord', gameId, word, (error, result) ->
+
+### Verify
+
+                expect(error.error).toEqual 'not-your-turn'
+                done()
