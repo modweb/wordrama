@@ -196,10 +196,48 @@ Add player to the game
 
         Games.update criteria, action
 
+## Insert Word
+
+      insertWord: (gameId, word) ->
+
+        if not Meteor.user()? then throw new Meteor.Error 'not-logged-in', 'You must be logged in to end a game'
+
+        criteria =
+          _id: gameId
+
+        game = Games.findOne criteria
+
+
+        if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found"
+
+        if game.hasFinished then throw new Meteor.Error 'game-already-ended', "Game with id #{gameId} has already finished"
+
+        if not game.hasStarted then throw new Meteor.Error 'game-hasnt-started', "Game with id #{gameId} hasn't started yet"
+
+        if game.currentPlayersTurn isnt @userId then throw new Meteor.Error 'not-your-turn', "Games can only be ended if it's your turn"
+
+Prepend space if word isn't a period.
+
+        if word isnt '.' then word = " #{word}"
+
+Get the next players turn Id
+
+        nextPlayersTurnId = GameHelpers.getNextPlayerTurnId game
+
+        story = game.story + word
+        action =
+          $set:
+            currentPlayersTurn: nextPlayersTurnId
+            story: story
+
+        Games.update criteria, action
+
+
 ## Server Helper Methods
 
     @GameHelpers =
       getNextPlayerTurnId: (game) ->
+        game = _.omit game, '_id'
         check game, GameSchema
 
 Get the current currentPlayersTurn's index in players
