@@ -93,3 +93,29 @@ Subscribe to `singleGame` to access the collection
 
           expect(error.error).toEqual 'game-not-found'
           done()
+
+## Game hasn't started
+
+      it "should throw an error if game hasn't started", (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+### Execute
+
+            word = 'test'
+            Meteor.call 'insertWord', gameId, word, (error, result) ->
+
+### Verify
+
+              expect(error.error).toEqual 'game-hasnt-started'
+              done()
