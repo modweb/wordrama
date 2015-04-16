@@ -1,7 +1,8 @@
 <template name='gameListItem'>
   <div class='gameListItem jumbotron'>
-    <button class='btn btn-primary join-game'>Join Game</button><br>
-    Prompt: {{story}}...<br>
+    <button class='btn btn-primary join-game'>Join Game</button>
+    <a href='{{pathFor "game"}}'><button class='btn btn-info'>View Game</button></a><br>
+    <b>{{story}}</b>...<br>
     Players:
     {{#each players}}
       <span class='label label-default'>{{name}}</span>

@@ -33,11 +33,13 @@ TODO: there must be a better way to do this!
 
 We should have one game in the data context
 
-          numberOfGames = Games.find().count()
+          gameId = Router.current().params._id
+          criteria = _id: gameId
+          numberOfGames = Games.find(criteria).count()
           expect(numberOfGames).toEqual 1
 
-          game = Games.findOne()
-          expect(Router.current().params._id).toEqual game._id
+          game = Games.findOne(criteria)
+          expect(gameId).toEqual game._id
 
 The game should match the game schema
 Strip game of _id to match GameSchema
@@ -73,3 +75,44 @@ Look for some games (this relies on games being created, fixutres should do that
 
         expect(gameElement).not.toBeUndefined()
         done()
+
+# Join game (UI)
+
+    describe 'Join open game (UI)', ->
+
+      beforeEach ClientIntegrationTestHelpers.loginIfLoggedOut
+
+      beforeEach (done) ->
+        Router.go 'games'
+        Tracker.afterFlush done
+
+      beforeEach waitForRouter
+
+      it 'should join a game and navigate to game route when join game button is clicked', (done) ->
+
+        $('.join-game').trigger 'click'
+
+setTimeout is necessary to wait for Iron Router to do it's thing.
+TODO: there must be a better way to do this!
+
+        Meteor.setTimeout ->
+          currentRoute = Router.current().route
+          expect(currentRoute.getName()).toEqual 'game'
+
+We should have one game in the data context
+
+          gameId = Router.current().params._id
+          criteria = _id: gameId
+
+          numberOfGames = Games.find(criteria).count()
+          expect(numberOfGames).toEqual 1
+
+          game = Games.findOne(criteria)
+          expect(gameId).toEqual game._id
+
+Current user should be a player in the game
+
+          isPlayer = !!_.findWhere game.players, userId: Meteor.userId()
+          expect(isPlayer).toBeTruthy()
+          done()
+        , 200
