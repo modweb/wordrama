@@ -57,6 +57,35 @@ Subscribe to `singleGame` to access the collection
               expect(error.error).toEqual 'not-enough-players'
               done()
 
+## Start game, throw error if not player
+
+      it 'should throw an error if not player in game', (done) ->
+
+### Setup
+
+        dummyGame = ClientIntegrationTestHelpers.getDummyGame()
+        dummyGame.players = [
+          name: 'fakeplayer2'
+          userId: 'xC8Bg3dCofQokrKy2'
+        ,
+          name: 'fakeplayer'
+          userId: 'xC8Bg3dCofQokrKy3'
+        ]
+        Games.insert dummyGame, (error, result) ->
+          expect(error).toBeUndefined()
+          gameId = result
+
+Subscribe to `singleGame` to access the collection
+
+          subscription = Meteor.subscribe 'singleGame', gameId, ->
+
+            Meteor.call 'startGame', gameId, (error, result) ->
+
+### Verify
+
+              expect(error.error).toEqual 'not-member-of-game'
+              done()
+
 ## Start Game; Fail if not logged in
 
       it 'should throw an error if user is not logged in', (done) ->

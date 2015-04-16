@@ -113,6 +113,12 @@ Check that game has enough players
         if game.players.length < 2
           throw new Meteor.Error 'not-enough-players', "Game with id #{gameId} only has #{game.players.length} player, at least 2 players are required to start the game"
 
+Check that user is one of the players
+
+        isPlayer = !!_.findWhere game.players, userId: Meteor.userId()
+
+        if not isPlayer then throw new Meteor.Error 'not-member-of-game', "You (#{Meteor.userId()}) are not a player in game with id #{gameId}"
+
 Check that game hasn't finished
 
         if game.hasFinished
@@ -125,7 +131,7 @@ Check that game isn't missing story
 
 Check that game isn't missing promptId
 
-        if  not game.promptId?
+        if not game.promptId?
           throw new Meteor.Error 'game-missing-promptId', "Game with id #{gameId} is missing promptId"
 
 Start game!
