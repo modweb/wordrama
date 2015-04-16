@@ -1,0 +1,7 @@
+<template name='games'>
+  <button id='createGame' class='btn btn-large btn-success'>Creat New Game</button>
+  <h1>Open Games</h1>
+  {{#each games}}
+    {{> gameListItem}}
+  {{/each}}
+</template>

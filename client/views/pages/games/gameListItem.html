@@ -1,0 +1,10 @@
+<template name='gameListItem'>
+  <div class='gameListItem jumbotron'>
+    <button class='btn btn-primary join-game'>Join Game</button><br>
+    Prompt: {{story}}...<br>
+    Players:
+    {{#each players}}
+      <span class='label label-default'>{{name}}</span>
+    {{/each}}
+  </div>
+</template>

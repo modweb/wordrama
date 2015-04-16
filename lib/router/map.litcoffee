@@ -5,5 +5,6 @@
       @route 'about'
       @route 'game',
         path: 'game/:_id'
-        controller: 'RouteControllers.singleGame'
-      @route 'games'
+        controller: RouteControllers.singleGame
+      @route 'games',
+        controller: RouteControllers.openGames

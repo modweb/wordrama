@@ -1,3 +1,6 @@
+    Template.games.helpers
+      games: -> Games.find().fetch()
+
     Template.games.events
       'click #createGame': (event) ->
         Meteor.call 'createGame', (error, result) ->
