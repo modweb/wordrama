@@ -176,6 +176,8 @@ Check if player is already in game.
 
         if hasAlreadyJoined then throw new Meteor.Error 'already-joined-game', "You (#{Meteor.userId()}) have already joined game with id #{gameId} #{hasAlreadyJoined} #{player}"
 
+        if game.hasStarted then throw new Meteor.Error 'already-started', "Whoa there! You can't join a game that's already started. Try another game or make your own."
+
 Update action
 
         action =
