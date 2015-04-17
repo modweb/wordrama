@@ -4,13 +4,15 @@
       promptValidation: ->
         invalid = yes
         if invalid then 'has-warnding'
+      usersTurn: ->
+        usersTurn = Meteor.userId() is Template.currentData().currentPlayersTurn
 
     Template.game.events
       'click .start-game': (event, template) ->
         Meteor.call 'startGame', this._id
-      'submit form': (event, template) ->
+      'submit #newPromptForm': (event, template) ->
         event.preventDefault()
         phrase = event.target.phrase.value
         console.log this
         Meteor.call 'insertPromptForGame', Template.currentData()._id, phrase, (error, result) ->
-          if error? then sweetAlert "Uh oh...", error.message
+          if error? then sweetAlert "Uh oh...", error.message, 'error'

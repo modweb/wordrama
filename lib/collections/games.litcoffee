@@ -11,6 +11,7 @@
       word:
         type: String
         regEx: /^[^\s.]*$/
+        label: 'Next Word'
         min: 1
         max: 25
 
@@ -227,7 +228,7 @@ Add player to the game
 
         if not game.hasStarted then throw new Meteor.Error 'game-hasnt-started', "Game with id #{gameId} hasn't started yet"
 
-        if game.currentPlayersTurn isnt @userId then throw new Meteor.Error 'not-your-turn', "Games can only be ended if it's your turn"
+        if game.currentPlayersTurn isnt @userId then throw new Meteor.Error 'not-your-turn', "You can only insert word if it's your turn"
 
 Prepend space if word isn't a period.
 
