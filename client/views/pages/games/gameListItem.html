@@ -4,8 +4,6 @@
     <a href='{{pathFor "game"}}'><button class='btn btn-info'>View Game</button></a><br>
     <b>{{story}}</b>...<br>
     Players:
-    {{#each players}}
-      <span class='label label-default'>{{name}}</span>
-    {{/each}}
+    {{> players}}
   </div>
 </template>

@@ -3,6 +3,7 @@
     @PromptSchema = new SimpleSchema
       phrase:
         type: String
+        label: 'Phrase (to begin the story)'
         min: 10
         max: 200
 
@@ -49,8 +50,7 @@ insert prompt
           $set:
             promptId: promptId
             story: phrase
-        Games.update criteria, action
-
-        console.log criteria, action
 
 update game
+
+        Games.update criteria, action

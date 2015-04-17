@@ -1,3 +1,25 @@
 <template name='game'>
-  <h1>Wordrama game {{game._id}}</h1>
+  <h1>Wordrama!</h1>
+  <p>
+    <span class='h3'>Players </span>
+    {{> players}}
+  </p>
+
+  {{#if needsPrompt}}
+    {{> quickForm id='newPromptForm' schema='PromptSchema' type='normal' buttonContent='Create New Prompt'}}
+  {{else}}
+    <div class='well'>
+      <p>
+        <span class='h4'>{{story}}</span>
+      </p>
+    </div>
+  {{/if}}
+
+  {{#if readyToStart}}
+    <button class='btn btn-success start-game'>Start Game</button>
+  {{/if}}
+
+  {{#if usersTurn}}
+    {{> quickForm id='wordForm' schema='WordSchema' type='meteormethod' buttonContext='Add Word'}}
+  {{/if}}
 </template>

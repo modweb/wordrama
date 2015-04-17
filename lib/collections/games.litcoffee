@@ -7,6 +7,13 @@
         type: String
         regEx: SimpleSchema.RegEx.Id
 
+    @WordSchema = new SimpleSchema
+      word:
+        type: String
+        regEx: /^[^\s.]*$/
+        min: 1
+        max: 25
+
     @GameSchema = new SimpleSchema
       createdBy:
         type: String
