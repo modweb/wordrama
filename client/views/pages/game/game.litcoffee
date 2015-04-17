@@ -5,7 +5,7 @@
         invalid = yes
         if invalid then 'has-warnding'
       usersTurn: ->
-        usersTurn = Meteor.userId() is Template.currentData().currentPlayersTurn
+        usersTurn = Meteor.userId() is this.currentPlayersTurn and this.hasStarted
 
     Template.game.events
       'click .start-game': (event, template) ->
