@@ -1,9 +1,9 @@
 <template name='gameListItem'>
   <div class='gameListItem jumbotron'>
     {{#if $not hasStarted}}
-      <button class='btn btn-primary join-game'>Join</button>
+      <button class='btn btn-primary join-game'><i class='fa fa-user-plus'></i> Join</button>
     {{/if}}
-    <a href='{{pathFor "game"}}'><button class='btn btn-info'>Watch</button></a><br>
+    <a href='{{pathFor "game"}}'><button class='btn btn-info'><i class='fa fa-eye'></i> Watch</button></a><br>
     <b>{{story}}</b>...<br>
     Players:
     {{> players}}

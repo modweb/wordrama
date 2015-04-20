@@ -1,7 +1,18 @@
 <template name='games'>
-  <button id='createGame' class='btn btn-large btn-success'>Creat New Game</button>
-  <h1>Open Games</h1>
-  {{#each games}}
-    {{> gameListItem}}
-  {{/each}}
+  <h1>Browse Games</h1>
+  <button id='createGame' class='btn btn-lg btn-success create-game'><i class='fa fa-plus'></i> New Game</button>
+  <div class='row'>
+    <div class='col-md-6'>
+      <h2>Need More Players</h2>
+      {{#each openGames}}
+        {{> gameListItem}}
+      {{/each}}
+    </div>
+    <div class='col-md-6'>
+      <h2>In Progress</h2>
+      {{#each inProgressGames}}
+        {{> gameListItem}}
+      {{/each}}
+    </div>
+  </div>
 </template>
