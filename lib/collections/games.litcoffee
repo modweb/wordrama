@@ -10,7 +10,7 @@
     @WordSchema = new SimpleSchema
       word:
         type: String
-        regEx: /^[^\s.]*$/
+        regEx: /^[^\s]*$/
         label: 'Next Word'
         min: 1
         max: 25
