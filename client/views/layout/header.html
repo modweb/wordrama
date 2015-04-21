@@ -11,9 +11,7 @@
       </div>
       <div class="navbar-collapse collapse navbar-inverse-collapse">
         <ul class="nav navbar-nav">
-          {{#if currentUser}}
-            <li class='{{isActiveRoute regex="games"}}'><a href='{{pathFor "games"}}'>Games</a></li>
-          {{/if}}
+          <li class='{{isActiveRoute regex="games"}}'><a href='{{pathFor "games"}}'>Games</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {{#if currentUser}}
