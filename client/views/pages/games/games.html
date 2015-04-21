@@ -1,9 +1,9 @@
 <template name='games'>
-  <h1>Browse Games</h1>
-  <button id='createGame' class='btn btn-lg btn-success create-game'><i class='fa fa-plus'></i> New Game</button>
+  <h1>Games</h1>
+  <button id='createGame' class='btn btn-raised btn-lg btn-success create-game'><i class='fa fa-plus'></i> Create New Game</button>
   <div class='row'>
     <div class='col-md-6'>
-      <h2>Need More Players</h2>
+      <h2>New Games</h2>
       {{#each openGames}}
         {{> gameListItem}}
       {{/each}}

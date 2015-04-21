@@ -20,9 +20,6 @@
       positiveFeedback: yes
       showValidating: yes
 
-      privacyUrl: 'privacy'
-      termsUrl: 'terms-of-use'
-
       homeRoutePath: '/'
       redirectTimeout: 4000
 
