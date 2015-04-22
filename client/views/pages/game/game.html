@@ -22,14 +22,16 @@
     <button class='btn btn-success start-game'>Start Game</button><br>
   {{/if}}
 
-  {{#if canSkipMove}}
-    <button class='btn btn-info skip-move btn-lg'>Skip!</button><br>
-  {{else}}
-    <div class="progress">
-      <div class="progress-bar progress-bar-striped active {{progressClass}}" role="progressbar" aria-valuenow="{{percentTimeLeft}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percentTimeLeft}}%">
-        <span class="sr-only">45% Complete</span>
+  {{#if hasStarted}}
+    {{#if canSkipMove}}
+      <button class='btn btn-info skip-move btn-lg'>Skip!</button><br>
+    {{else}}
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped active {{progressClass}}" role="progressbar" aria-valuenow="{{percentTimeLeft}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percentTimeLeft}}%">
+          <span class="sr-only">45% Complete</span>
+        </div>
       </div>
-    </div>
+    {{/if}}
   {{/if}}
 
 </template>

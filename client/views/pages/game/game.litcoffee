@@ -19,7 +19,8 @@
 
     Template.game.events
       'click .start-game': (event, template) ->
-        Meteor.call 'startGame', this._id
+        Meteor.call 'startGame', this._id, (error, result) ->
+          if error? then sweetAlert "Uh oh...", error.message, 'error'
       'click .skip-move': (event, template) ->
         Meteor.call 'skipPlayerMove', this._id, (error, result) ->
           if error? then sweetAlert "Uh oh...", error.message, 'error'
