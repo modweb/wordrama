@@ -3,9 +3,11 @@
     @PromptSchema = new SimpleSchema
       phrase:
         type: String
-        label: 'Phrase (to begin the story)'
+        label: 'Story prompt'
         min: 1
         max: 200
+        autoform:
+          placeholder: 'Once upon a time, the story begin like this...'
 
     @Prompts = new Mongo.Collection 'prompts'
     Prompts.attachSchema PromptSchema

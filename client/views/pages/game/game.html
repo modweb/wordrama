@@ -1,8 +1,8 @@
 <template name='game'>
+  <div class='row buffer20'></div>
   {{#if needsPrompt}}
     {{> quickForm id='newPromptForm' schema='PromptSchema' type='normal' buttonContent='Create New Prompt'}}
   {{else}}
-    <div class='row buffer20'></div>
     <div class='story'>
       <p>
         <span class='h4'><strong>{{story}}</strong></span>
