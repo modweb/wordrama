@@ -272,7 +272,7 @@ Check that user is one of the players
 
         if not isPlayer then throw new Meteor.Error 'not-member-of-game', "You (#{Meteor.userId()}) are not a player in game with id #{gameId}"
 
-Check that the last move was >25 seconds ago
+Check that the last move was >15 seconds ago
 
         now = moment.utc()
         timeTurnStarted = moment game.timeTurnStarted
