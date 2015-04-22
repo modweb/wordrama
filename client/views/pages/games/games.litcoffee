@@ -11,6 +11,7 @@
     Template.games.events
       'click #createGame': (event) ->
         Meteor.call 'createGame', (error, result) ->
-          console.log error if error?
-          console.log "id of newly created game: #{result}"
-          Router.go 'game', _id: result
+          if error?
+            sweetAlert "Uh oh...", error.message, 'error'
+          else
+            Router.go 'game', _id: result

@@ -1,0 +1,7 @@
+<template name='newUser'>
+  {{#if $not currentUser}}
+    <a href='{{pathFor "atSignUp"}}'>
+      <div class='alert alert-warning'><strong>Hey newb!</strong> You need to sign up for an account before you can play. Click here to sign up.</div>
+    </a>
+  {{/if}}
+</template>
