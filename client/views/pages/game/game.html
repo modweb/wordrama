@@ -2,11 +2,16 @@
   {{#if needsPrompt}}
     {{> quickForm id='newPromptForm' schema='PromptSchema' type='normal' buttonContent='Create New Prompt'}}
   {{else}}
+    <div class='row buffer20'></div>
     <div class='story'>
       <p>
-        <span class='h4'>{{story}}</span>
+        <span class='h4'><strong>{{story}}</strong></span>
       </p>
     </div>
+  {{/if}}
+
+  {{#if usersTurn}}
+    {{> insertWord}}
   {{/if}}
 
   <p>
@@ -18,7 +23,7 @@
   {{/if}}
 
   {{#if canSkipMove}}
-    <button class='btn btn-info skip-move'>Skip!</button><br>
+    <button class='btn btn-info skip-move btn-lg'>Skip!</button><br>
   {{else}}
     <div class="progress">
       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{{percentTimeLeft}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percentTimeLeft}}%">
@@ -26,11 +31,5 @@
       </div>
     </div>
   {{/if}}
-
-  {{#if usersTurn}}
-    {{> insertWord}}
-  {{/if}}
-
-
 
 </template>

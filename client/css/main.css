@@ -14,3 +14,25 @@ body {
     padding-top: 60px;
   }
 }
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select:focus,
+  textarea:focus,
+  input:focus {
+    font-size: 16px;
+  }
+}
+
+input[type='text'],
+input[type='number'],
+textarea {
+  font-size: 16px;
+}
+
+.story {
+  height: 50%;
+}
+
+.buffer20 {
+  margin-top: 20px;
+}

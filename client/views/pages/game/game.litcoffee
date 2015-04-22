@@ -7,9 +7,9 @@
       usersTurn: ->
         usersTurn = Meteor.userId() is this.currentPlayersTurn and this.hasStarted
       canSkipMove: ->
-        turnMoreThan15SecondsAgo = Template.instance().secondsToSkip?.get() >= 15000
+        turnMoreThan15SecondsAgo = Template.instance().secondsToSkip?.get() >= 15
       percentTimeLeft: ->
-        ((15000.0 - Template.instance().secondsToSkip.get()) / 15000.0) * 100.0
+        ((15 - Template.instance().secondsToSkip.get()) / 15) * 100
 
     Template.game.events
       'click .start-game': (event, template) ->
@@ -29,5 +29,5 @@
       Meteor.setInterval ->
         now = moment.utc()
         timeTurnStarted = moment Games.findOne().timeTurnStarted
-        self.secondsToSkip.set (now.diff timeTurnStarted, 'milliseconds')
-      , 100
+        self.secondsToSkip.set (now.diff timeTurnStarted, 'seconds')
+      , 1000

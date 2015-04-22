@@ -11,7 +11,9 @@
       word:
         type: String
         regEx: /^[^\s]*$/
-        label: 'Next Word'
+        label: 'Your turn!'
+        autoform:
+          placeholder: 'next word here'
         min: 1
         max: 25
 
