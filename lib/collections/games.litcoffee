@@ -274,9 +274,9 @@ Check that the last move was >25 seconds ago
 
         now = moment.utc()
         timeTurnStarted = moment game.timeTurnStarted
-        turnMoreThan25SecondsAgo = (now.diff timeTurnStarted, 'seconds') > 25
+        turnMoreThan25SecondsAgo = (now.diff timeTurnStarted, 'seconds') >= 15
 
-        if not turnMoreThan25SecondsAgo then throw new Meteor.Error 'skip-too-soon', "You hav eto wait at least 25 seconds to skip a player's move."
+        if not turnMoreThan25SecondsAgo then throw new Meteor.Error 'skip-too-soon', "You hav eto wait at least 15 seconds to skip a player's move."
 
 Get the next players turn Id
 

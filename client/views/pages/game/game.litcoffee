@@ -3,13 +3,13 @@
       needsPrompt: -> not (this.promptId? and this.story?)
       promptValidation: ->
         invalid = yes
-        if invalid then 'has-warnding'
+        if invalid then 'has-warning'
       usersTurn: ->
         usersTurn = Meteor.userId() is this.currentPlayersTurn and this.hasStarted
       canSkipMove: ->
-        turnMoreThan15SecondsAgo = Template.instance().secondsToSkip?.get() >= 15
-      secondsFromMoveStart: ->
-        Template.instance().secondsToSkip.get()
+        turnMoreThan15SecondsAgo = Template.instance().secondsToSkip?.get() >= 15000
+      percentTimeLeft: ->
+        ((15000.0 - Template.instance().secondsToSkip.get()) / 15000.0) * 100.0
 
     Template.game.events
       'click .start-game': (event, template) ->
@@ -20,7 +20,6 @@
       'submit #newPromptForm': (event, template) ->
         event.preventDefault()
         phrase = event.target.phrase.value
-        console.log this
         Meteor.call 'insertPromptForGame', Template.currentData()._id, phrase, (error, result) ->
           if error? then sweetAlert "Uh oh...", error.message, 'error'
 
@@ -30,5 +29,5 @@
       Meteor.setInterval ->
         now = moment.utc()
         timeTurnStarted = moment Games.findOne().timeTurnStarted
-        self.secondsToSkip.set (now.diff timeTurnStarted, 'seconds')
-      , 1000
+        self.secondsToSkip.set (now.diff timeTurnStarted, 'milliseconds')
+      , 100
