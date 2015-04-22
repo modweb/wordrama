@@ -2,8 +2,9 @@
   <div class='gameListItem jumbotron'>
     <button class='btn btn-primary join-game'><i class='fa fa-user-plus'></i> Join the fun</button>
     <a href='{{pathFor "game"}}'><button class='btn btn-info'><i class='fa fa-eye'></i> Watch</button></a><br>
-    <b>{{story}}</b>...<br>
-    Players:
     {{> players}}
+    <br>
+    <br>
+    <p>{{story}}</p>
   </div>
 </template>
