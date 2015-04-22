@@ -26,6 +26,9 @@
           return $setOnInsert: new Date() if this.isUpsert
           this.unset()
         optional: yes
+      timeTurnStarted:
+        type: Date
+        optional: yes
       hasStarted:
         type: Boolean
         autoValue: ->
@@ -147,6 +150,7 @@ Start game!
         action =
           $set:
             hasStarted: yes
+            timeTurnStarted: moment.utc().toDate()
 
         Games.update criteria, action
 
@@ -162,21 +166,17 @@ Lookup game
           _id: gameId
         game = Games.findOne criteria
 
+Check if player is already in game.
+
+        hasAlreadyJoined = !!_.findWhere game.players, userId: Meteor.userId()
+
+        if hasAlreadyJoined then throw new Meteor.Error 'already-joined-game', "You (#{Meteor.userId()}) have already joined game with id #{gameId} #{hasAlreadyJoined} #{player}"
+
 Create new player
 
         player =
           userId: Meteor.userId()
           name: Meteor.user()?.username
-
-Check if player is already in game.
-
-        hasAlreadyJoined = !!_.findWhere game.players, userId: Meteor.userId()
-
-        if hasAlreadyJoined then console.log "user has already joined game", game, player
-
-        if hasAlreadyJoined then throw new Meteor.Error 'already-joined-game', "You (#{Meteor.userId()}) have already joined game with id #{gameId} #{hasAlreadyJoined} #{player}"
-
-        if game.hasStarted then throw new Meteor.Error 'already-started', "Whoa there! You can't join a game that's already started. Try another game or make your own."
 
 Update action
 
@@ -244,9 +244,52 @@ Get the next players turn Id
         action =
           $set:
             currentPlayersTurn: nextPlayersTurnId
+            timeTurnStarted: moment.utc().toDate()
             story: story
 
         Games.update criteria, action
+
+## Skip player move
+
+      skipPlayerMove: (gameId) ->
+
+        criteria =
+          _id: gameId
+
+        game = Games.findOne criteria
+
+        if not game? then throw new Meteor.Error 'game-not-found', "Game with id #{gameId} was not found"
+
+        if game.hasFinished then throw new Meteor.Error 'game-already-ended', "Game with id #{gameId} has already finished"
+
+        if not game.hasStarted then throw new Meteor.Error 'game-hasnt-started', "Game with id #{gameId} hasn't started yet"
+
+Check that user is one of the players
+
+        isPlayer = !!_.findWhere game.players, userId: Meteor.userId()
+
+        if not isPlayer then throw new Meteor.Error 'not-member-of-game', "You (#{Meteor.userId()}) are not a player in game with id #{gameId}"
+
+Check that the last move was >25 seconds ago
+
+        now = moment.utc()
+        timeTurnStarted = moment game.timeTurnStarted
+        turnMoreThan25SecondsAgo = (now.diff timeTurnStarted, 'seconds') > 25
+
+        if not turnMoreThan25SecondsAgo then throw new Meteor.Error 'skip-too-soon', "You hav eto wait at least 25 seconds to skip a player's move."
+
+Get the next players turn Id
+
+        nextPlayersTurnId = GameHelpers.getNextPlayerTurnId game
+
+        action =
+          $set:
+            currentPlayersTurn: nextPlayersTurnId
+            timeTurnStarted: moment.utc().toDate()
+
+        Games.update criteria, action
+
+
 
 
 ## Server Helper Methods

@@ -19,3 +19,5 @@ aldeed:collection2
 velocity:console-reporter
 kevohagan:sweetalert
 raix:handlebar-helpers
+momentjs:moment
+reactive-var

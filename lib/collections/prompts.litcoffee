@@ -4,7 +4,7 @@
       phrase:
         type: String
         label: 'Phrase (to begin the story)'
-        min: 10
+        min: 1
         max: 200
 
     @Prompts = new Mongo.Collection 'prompts'

@@ -22,4 +22,12 @@
   {{#if usersTurn}}
     {{> insertWord}}
   {{/if}}
+
+  {{#if canSkipMove}}
+    <button class='btn btn-info skip-move'>Skip player's move!</button>
+  {{/if}}
+
+  {{#if secondsFromMoveStart}}
+    {{secondsFromMoveStart}} seconds...
+  {{/if}}
 </template>
