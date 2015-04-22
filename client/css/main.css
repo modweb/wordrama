@@ -36,3 +36,11 @@ textarea {
 .buffer20 {
   margin-top: 20px;
 }
+
+.player-label {
+  font-size: 16px;
+}
+
+.progress {
+  height: 20px;
+}

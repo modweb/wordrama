@@ -10,6 +10,12 @@
         turnMoreThan15SecondsAgo = Template.instance().secondsToSkip?.get() >= 15
       percentTimeLeft: ->
         ((15 - Template.instance().secondsToSkip.get()) / 15) * 100
+      progressClass: ->
+        percent = ((15 - Template.instance().secondsToSkip.get()) / 15) * 100
+        switch
+          when percent < 25 then 'progress-bar-danger'
+          when percent < 75 then 'progress-bar-warning'
+          else 'progress-bar-success'
 
     Template.game.events
       'click .start-game': (event, template) ->
