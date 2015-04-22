@@ -13,6 +13,7 @@ boilerplate-generator@1.0.3
 callback-hook@1.0.3
 check@1.0.5
 coffeescript@1.0.6
+dburles:mongo-collection-instances@0.2.6
 ddp@1.1.0
 deps@1.0.7
 ejson@1.0.6
@@ -21,6 +22,7 @@ fastclick@1.0.3
 fezvrasta:bootstrap-material-design@0.3.0
 fortawesome:fontawesome@4.3.0
 geojson-utils@1.0.3
+houston:admin@2.0.3
 html-tools@1.0.4
 htmljs@1.0.4
 http@1.1.0
@@ -76,6 +78,7 @@ spacebars-compiler@1.0.6
 srp@1.0.3
 standard-app-packages@1.0.5
 templating@1.1.1
+tmeasday:paginated-subscription@0.2.4
 tracker@1.0.7
 twbs:bootstrap@3.3.4
 ui@1.0.6
