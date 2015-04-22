@@ -1,22 +1,18 @@
 <template name='home'>
   <div class='row'>
     <div class='col-md-12'>
-      <h1>Welcome to Wordrama! <small>One word at a time, one laugh after another.</small></h1>
-      <h3><a href='{{pathFor "games"}}'>Browse games</a> to join an active game, or create a new game.</h3>
-      {{#if $not currentUser}}
-      <a href='{{pathFor "atSignUp"}}'>
-        <div class='alert alert-info'><strong>Hey newb!</strong> You need to sign up for an account before you can play</div>
-      </a>
-      {{/if}}
-      <div class='well'>
-        <h2>Rules</h2>
-        <ol>
-          <li>Add one word at a time</li>
-          <li>25 seconds to add a word or your turn is skipped</li>
-          <li>Game complete when the word count goal is reached</li>
-        </ol>
-        <p>That's it! Games are most fun with 3 or more players</p>
-      </div>
+      <h1>Welcome to Wordrama!<br><small>One word at a time, one laugh after another.</small></h1>
+      <h2>Basics</h2>
+      <p>Wordrama is a simple collaborative story writing game. Games start
+        with a prompt, such as "Once upon a time...", and players take turns
+        writing the story one word at a time.</p>
+      <p><a href='{{pathFor "games"}}'>Browse games</a> to join an active game, or create a new game.</p>
+      <h2>Rules</h2>
+      <ol>
+        <li>Add one word at a time</li>
+        <li>15 seconds to add a word or other players can elect to skip your turn</li>
+      </ol>
+      <p>That's it! Games are most fun with 3 or more players</p>
     </div>
   </div>
 </template>
