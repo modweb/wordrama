@@ -13,8 +13,8 @@
       progressClass: ->
         percent = ((15 - Template.instance().secondsToSkip.get()) / 15) * 100
         switch
-          when percent < 25 then 'progress-bar-danger'
-          when percent < 75 then 'progress-bar-warning'
+          when percent < 20 then 'progress-bar-danger'
+          when percent < 40 then 'progress-bar-warning'
           else 'progress-bar-success'
 
     Template.game.events
